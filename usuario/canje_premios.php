@@ -22,12 +22,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head><meta charset="UTF-8"><title>Canje de Premios</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head>
 <body class="container mt-4">
-<h2>Canje de Premios</h2>
-<form method="POST">
-  <select name="premio_id" class="form-select mb-2">
-    <?php while($p = $premios->fetch_assoc()) echo "<option value='{$p['id']}'>{$p['nombre']} - {$p['puntos_requeridos']} pts</option>"; ?>
-  </select>
-  <button class="btn btn-primary">Canjear</button>
-</form>
-<a href="panel.php" class="btn btn-secondary">Volver</a>
-</body></html>
+<h2>Canjea tus Premios</h2>
+<div class="row">
+<?php while ($p = $premios->fetch_assoc()) { ?>
+  <div class="col-md-4 mb-3">
+    <form method="POST" class="card shadow-sm h-100">
+      <?php if (!empty($p['imagen'])): ?>
+        <img src="../assets/img/<?php echo $p['imagen']; ?>" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+      <?php endif; ?>
+      <div class="card-body">
+        <h5 class="card-title"><?php echo $p['nombre']; ?></h5>
+        <p class="card-text"><?php echo $p['descripcion']; ?></p>
+        <p><strong><?php echo $p['puntos_requeridos']; ?> pts</strong></p>
+        <input type="hidden" name="premio_id" value="<?php echo $p['id']; ?>">
+        <button class="btn btn-primary w-100" type="submit">Canjear</button>
+      </div>
+    </form>
+  </div>
+<?php } ?>
+</div>
+<a href="panel.php" class="btn btn-secondary mt-3">Volver</a>
+</body>
+</html>
