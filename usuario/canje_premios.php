@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <h2>Canjea tus Premios</h2>
 <div class="row">
 <?php while ($p = $premios->fetch_assoc()) { ?>
-  <div class="col-md-4 mb-3">
+  <div class="col-md-3 mb-3">
     <form method="POST" class="card shadow-sm h-100">
       <?php if (!empty($p['imagen'])): ?>
         <img src="../assets/img/<?php echo $p['imagen']; ?>" class="card-img-top" style="max-height: 200px; object-fit: cover;">
