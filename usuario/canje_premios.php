@@ -23,6 +23,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head>
 <body class="container mt-4">
 <h2>Canjea tus Premios</h2>
+<div class="mb-4">
+  <a href="historial.php" class="btn btn-outline-dark">📜 Ver historial de canjes</a>
+</div>
 <div class="row">
 <?php while ($p = $premios->fetch_assoc()) { ?>
   <div class="col-md-3 mb-3">
