@@ -242,5 +242,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transcribed_phrase']))
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+      .then((reg) => console.log("✅ Service Worker registrado:", reg))
+      .catch((err) => console.error("❌ Error al registrar SW:", err));
+  }
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./service-worker.js")
+    .then(reg => console.log("✅ Service Worker registrado:", reg.scope))
+    .catch(err => console.error("❌ Error al registrar SW:", err));
+}
+</script>
+
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config/db.php'; // Asegúrate de que este archivo conecta a tu base de datos
+include 'config/db.php'; // Conexión a la base de datos
 
 $error = ""; // Inicializamos la variable de error
 
@@ -17,15 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($user = $result->fetch_assoc()) {
             if (password_verify($password, $user["password"])) {
-                // Credenciales correctas. Marcar la sesión para 2FA y redirigir.
-                $_SESSION["2fa_pending_telefono"] = $user["telefono"]; // Guardamos el teléfono para la verificación de voz
-                $_SESSION["2fa_pending_id"] = $user["id"]; // O el ID del cliente si lo necesitas
-                
-                // Si el usuario no tiene voice_print_id, podrías redirigirlo a una página para registrar su voz,
-                // o mostrar un mensaje para que use solo usuario/contraseña si no quieres forzar 2FA para todos.
-                // Por ahora, asumimos que si llega aquí, debe pasar 2FA.
+                // Credenciales correctas → guardar sesión
+                $_SESSION["telefono"] = $user["telefono"];
+                $_SESSION["tipo"] = "cliente";
 
-                header("Location: verify_voice.php"); // Redirigir a la página de verificación por voz
+                header("Location: usuario/panel.php"); // Redirigir al panel del cliente
                 exit();
             } else {
                 $error = "Contraseña incorrecta.";
@@ -45,6 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login - Fidelización</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d6efd">
+    <!-- Iconos para navegadores -->
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
     <style>
         body {
             background: linear-gradient(to right, #667eea, #764ba2);
@@ -107,5 +108,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 </div>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+      .then((reg) => console.log("✅ Service Worker registrado:", reg))
+      .catch((err) => console.error("❌ Error al registrar SW:", err));
+  }
+</script>
 </body>
 </html>

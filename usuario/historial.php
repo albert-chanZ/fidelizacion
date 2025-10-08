@@ -28,6 +28,11 @@ $result = $stmt->get_result();
   <meta charset="UTF-8">
   <title>Historial de Canjes</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0d6efd">
+  <!-- Iconos para navegadores -->
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
 </head>
 <body class="bg-light">
 <div class="container mt-5">
@@ -64,5 +69,21 @@ $result = $stmt->get_result();
     <a href="canje_premios.php" class="btn btn-secondary">← Volver</a>
   </div>
 </div>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("../sw.js")
+      .then((reg) => console.log("✅ Service Worker registrado:", reg))
+      .catch((err) => console.error("❌ Error al registrar SW:", err));
+  }
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("../service-worker.js")
+    .then(reg => console.log("✅ Service Worker registrado:", reg.scope))
+    .catch(err => console.error("❌ Error al registrar SW:", err));
+}
+</script>
+
 </body>
 </html>
