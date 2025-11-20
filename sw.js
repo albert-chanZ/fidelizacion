@@ -1,45 +1,60 @@
-const CACHE_NAME = "fidelizacion-cache-v1";
+const CACHE_NAME = "fidelizacion-cache-v3";
+
+// Solo archivos públicos y estáticos
 const urlsToCache = [
-  "/",
-  "/index.php",
-  "/login.php",
-  "/panel.php",
-  "/canje_premios.php",
-  "/historial.php",
-  "/assets/css/style.css",
-  "/assets/icons/icon-192x192.png",
-  "/assets/icons/icon-512x512.png"
+  "/fidelizacion/login.php",
+  "/fidelizacion/assets/css/style.css",
+  "/fidelizacion/assets/icons/icon-192x192.png",
+  "/fidelizacion/assets/icons/icon-512x512.png"
 ];
 
-// Instalar y cachear archivos
+// Instalar y cachear archivos públicos
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
-
-// Activar y limpiar caches viejos
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
-            return caches.delete(cache);
-          }
-        })
+        urlsToCache.map((url) =>
+          fetch(url, { redirect: "follow" })
+            .then((response) => {
+              if (response.ok) return cache.put(url, response);
+            })
+            .catch(() => console.warn("No se pudo cachear:", url))
+        )
       );
     })
   );
 });
 
-// Interceptar peticiones y responder desde cache si está disponible
+// Activar y eliminar caches antiguos
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.map((key) => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      }))
+    )
+  );
+});
+
+// Interceptar peticiones y responder desde cache si aplica
 self.addEventListener("fetch", (event) => {
+  // Evitar cachear peticiones con sesión (panel, premios, etc.)
+  if (event.request.url.includes("panel.php") ||
+      event.request.url.includes("canje_premios.php") ||
+      event.request.url.includes("historial.php")) {
+    return; // deja pasar sin interceptar
+  }
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request);
     })
   );
 });
+
+// Manejar clics en notificaciones
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(clients.openWindow("/fidelizacion/usuario/panel.php"));
+});
+

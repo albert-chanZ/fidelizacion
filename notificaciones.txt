@@ -1,0 +1,12 @@
+'use strict';
+const btnNotificar = document.getElementById('btn-notificar'); 
+
+const showNotification = () => {
+    const permission = Notification.permission;
+    if (permission === 'granted') {
+        // crear una notificación de ejemplo
+        new Notification('Notificación', { body: '¡Tienes una nueva notificación!' });
+    } else if (permission === 'denied') {
+        console.warn('El usuario no aceptó recibir notificaciones.');
+    }
+};

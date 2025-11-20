@@ -8,21 +8,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telefono = $_POST["telefono"] ?? '';
     $password = $_POST["password"] ?? '';
 
-    // Lógica para el login tradicional (teléfono y contraseña)
-    if (!empty($telefono) && !empty($password)) {
+   if (!empty($telefono) && !empty($password)) {
         $stmt = $conn->prepare("SELECT * FROM clientes WHERE telefono = ?");
         $stmt->bind_param("s", $telefono);
         $stmt->execute();
         $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
 
-        if ($user = $result->fetch_assoc()) {
+        if ($user) {
             if (password_verify($password, $user["password"])) {
-                // Credenciales correctas → guardar sesión
-                $_SESSION["telefono"] = $user["telefono"];
-                $_SESSION["tipo"] = "cliente";
+                $user_rol = $user["telefono"] ?? 'cliente'; 
 
-                header("Location: usuario/panel.php"); // Redirigir al panel del cliente
-                exit();
+                if ($user_rol == "admin") {
+                    $_SESSION["telefono"] = $user["telefono"];
+                    $_SESSION["tipo"] = "admin";
+                    header("Location: admin/dashboard.php");
+                    exit();
+                } else {
+                    $_SESSION["telefono"] = $user["telefono"];
+                    $_SESSION["tipo"] = "cliente";
+                    header("Location: usuario/panel.php");
+                    exit();
+                }
             } else {
                 $error = "Contraseña incorrecta.";
             }
@@ -38,11 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Fidelización</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Login - Fidelización</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0d6efd">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
     <!-- Iconos para navegadores -->
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
@@ -108,9 +117,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 </div>
+
+<script src="/fidelizacion/assets/js/notificaciones.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  showNotification();
+});
+</script>
+
 <script>
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js")
+    navigator.serviceWorker.register("sw.js")
       .then((reg) => console.log("✅ Service Worker registrado:", reg))
       .catch((err) => console.error("❌ Error al registrar SW:", err));
   }

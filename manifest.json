@@ -2,51 +2,52 @@
   "name": "Fidelización de Clientes",
   "short_name": "Fidelización",
   "description": "Sistema de fidelización con canje de premios e historial de cliente.",
-  "start_url": "/index.php",
-  "scope": "/",
+  "start_url": "/fidelizacion/index.php",
+  "scope": "/fidelizacion/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#0d6efd",
+
   "icons": [
+    { "src": "/fidelizacion/assets/icons/icon-72x72.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "/fidelizacion/assets/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/fidelizacion/assets/icons/icon-128x128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/fidelizacion/assets/icons/icon-144x144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "/fidelizacion/assets/icons/icon-152x152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "/fidelizacion/assets/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/fidelizacion/assets/icons/icon-384x384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "/fidelizacion/assets/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+
+  "shortcuts": [
     {
-      "src": "assets/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png"
+      "name": "Mi Panel",
+      "short_name": "Panel",
+      "description": "Ir al panel del usuario",
+      "url": "/fidelizacion/usuario/panel.php",
+      "icons": [
+        { "src": "/fidelizacion/assets/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
+      ]
     },
     {
-      "src": "assets/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png"
+      "name": "Canjear Premios",
+      "short_name": "Premios",
+      "description": "Ver y canjear premios disponibles",
+      "url": "/fidelizacion/usuario/canje_premios.php",
+      "icons": [
+        { "src": "/fidelizacion/assets/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
+      ]
     },
     {
-      "src": "assets/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "name": "Historial",
+      "short_name": "Historial",
+      "description": "Ver tu historial de canjes y puntos",
+      "url": "/fidelizacion/usuario/historial.php",
+      "icons": [
+        { "src": "/fidelizacion/assets/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
+      ]
     }
   ]
 }
+
