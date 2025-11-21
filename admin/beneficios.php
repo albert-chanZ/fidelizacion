@@ -55,57 +55,92 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $beneficios = $conn->query("SELECT * FROM beneficios");
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <title>Beneficios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- RESPONSIVO -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container mt-4">
+<body>
 
-<h2><?php echo $editando ? 'Editar Beneficio' : 'Agregar Beneficio'; ?></h2>
+<div class="container mt-4">
 
-<form method="POST" enctype="multipart/form-data" class="mb-4">
-  <?php if ($editando): ?>
-    <input type="hidden" name="id" value="<?php echo $edit_data['id']; ?>">
-  <?php endif; ?>
-  <input name="empresa" class="form-control mb-2" placeholder="Nombre de la empresa" required
-         value="<?php echo $editando ? $edit_data['empresa'] : ''; ?>">
-  <textarea name="descripcion" class="form-control mb-2" placeholder="Descripción del beneficio"><?php echo $editando ? $edit_data['descripcion'] : ''; ?></textarea>
-  <input type="file" name="logo" class="form-control mb-2" accept="image/*">
-  <button class="btn btn-<?php echo $editando ? 'warning' : 'success'; ?>">
-    <?php echo $editando ? 'Actualizar Beneficio' : 'Agregar Beneficio'; ?>
-  </button>
-  <?php if ($editando): ?>
-    <a href="beneficios.php" class="btn btn-secondary">Cancelar</a>
-  <?php endif; ?>
-</form>
+  <h2 class="text-center mb-4">
+    <?php echo $editando ? 'Editar Beneficio' : 'Agregar Beneficio'; ?>
+  </h2>
 
-<h4>Empresas con Beneficios</h4>
-<table class="table table-bordered">
-  <thead><tr><th>Logo</th><th>Empresa</th><th>Descripción</th><th>Acciones</th></tr></thead>
-  <tbody>
-  <?php while($b = $beneficios->fetch_assoc()) { ?>
-    <tr>
-      <td style="width: 100px;">
-        <?php if (!empty($b['logo'])): ?>
-          <img src="../assets/img/<?php echo $b['logo']; ?>" class="img-fluid" style="max-height: 60px;">
-        <?php else: ?> Sin logo <?php endif; ?>
-      </td>
-      <td><?php echo $b['empresa']; ?></td>
-      <td><?php echo $b['descripcion']; ?></td>
-      <td>
-        <a href="beneficios.php?editar=<?php echo $b['id']; ?>" class="btn btn-sm btn-warning">Editar</a>
-        <a href="beneficios.php?eliminar=<?php echo $b['id']; ?>" class="btn btn-sm btn-danger"
-           onclick="return confirm('¿Eliminar este beneficio?');">Eliminar</a>
-      </td>
-    </tr>
-  <?php } ?>
-  </tbody>
-</table>
+  <div class="card shadow p-4 mb-4">
+    <form method="POST" enctype="multipart/form-data">
+      <?php if ($editando): ?>
+        <input type="hidden" name="id" value="<?php echo $edit_data['id']; ?>">
+      <?php endif; ?>
 
-<a href="dashboard.php" class="btn btn-secondary">Volver</a>
+      <div class="mb-3">
+        <label class="form-label">Empresa</label>
+        <input name="empresa" class="form-control" required
+               value="<?php echo $editando ? $edit_data['empresa'] : ''; ?>">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea name="descripcion" class="form-control"><?php echo $editando ? $edit_data['descripcion'] : ''; ?></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Logo</label>
+        <input type="file" name="logo" class="form-control" accept="image/*">
+      </div>
+
+      <button class="btn btn-<?php echo $editando ? 'warning' : 'success'; ?> w-100 mb-2">
+        <?php echo $editando ? 'Actualizar Beneficio' : 'Agregar Beneficio'; ?>
+      </button>
+
+      <?php if ($editando): ?>
+        <a href="beneficios.php" class="btn btn-secondary w-100">Cancelar</a>
+      <?php endif; ?>
+    </form>
+  </div>
+
+  <h4 class="text-center mt-4">Empresas con Beneficios</h4>
+
+  <div class="table-responsive mt-3"> <!-- RESPONSIVO -->
+    <table class="table table-striped table-bordered align-middle">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>Logo</th>
+          <th>Empresa</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+      <?php while($b = $beneficios->fetch_assoc()) { ?>
+        <tr>
+          <td style="width: 90px;" class="text-center">
+            <?php if (!empty($b['logo'])): ?>
+              <img src="../assets/img/<?php echo $b['logo']; ?>" class="img-fluid" style="max-height: 60px;">
+            <?php else: ?> Sin logo <?php endif; ?>
+          </td>
+          <td><?php echo $b['empresa']; ?></td>
+          <td><?php echo $b['descripcion']; ?></td>
+          <td class="text-center">
+            <a href="beneficios.php?editar=<?php echo $b['id']; ?>" class="btn btn-sm btn-warning mb-1 w-100">Editar</a>
+            <a href="beneficios.php?eliminar=<?php echo $b['id']; ?>" class="btn btn-sm btn-danger w-100"
+               onclick="return confirm('¿Eliminar este beneficio?');">Eliminar</a>
+          </td>
+        </tr>
+      <?php } ?>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="text-center">
+    <a href="dashboard.php" class="btn btn-secondary mt-3 w-100">Volver</a>
+  </div>
+
+</div>
+
 </body>
 </html>
